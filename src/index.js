@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import SN from './lib/spatial_navigation.js';
-
-let spatialNavigation = null;
+import JsSpatialNavigation from './lib/spatial_navigation.js';
 
 export default class SpatialNavigation extends Component {
   componentWillMount() {
-    spatialNavigation = SN();
-
-    spatialNavigation.init();
-    spatialNavigation.add({
+    JsSpatialNavigation.init();
+    JsSpatialNavigation.add({
       selector: '.focusable'
     });
-    spatialNavigation.focus();
+    JsSpatialNavigation.focus();
   }
 
   render() {
@@ -117,7 +113,7 @@ export class FocusableSection extends Component {
 
     console.log(defaultElement, enterTo);
 
-    spatialNavigation.add({
+    JsSpatialNavigation.add({
       id: this.sectionId,
       selector: this._getSelector(),
       enterTo: enterTo,

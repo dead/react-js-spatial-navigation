@@ -1,8 +1,15 @@
 {
   "name": "react-js-spatial-navigation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A wrapper of js-spatial-navigation to react components",
   "main": "build/index.js",
+  "bugs": {
+    "url": "https://github.com/dead/react-js-spatial-navigation/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dead/react-js-spatial-navigation.git"
+  },
   "peerDependencies": {
     "react": "^15.5.4"
   },
