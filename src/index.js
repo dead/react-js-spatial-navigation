@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 import JsSpatialNavigation from './lib/spatial_navigation.js';
 
-export default class SpatialNavigation extends Component {
+/**
+* This component initialize the Spatial Navigation library.
+* It should be used only one time and in the root node of the application.
+* The spatial navigation only work within the Focusable components.
+*/
+class SpatialNavigation extends Component {
   componentWillMount() {
     JsSpatialNavigation.init();
     JsSpatialNavigation.add({
@@ -17,13 +22,26 @@ export default class SpatialNavigation extends Component {
       <div>{this.props.children}</div>
     );
   }
-};
+}
 
 function getSectionSelectorFromId(id) {
   return 'section_' + id;
 }
 
-export class Focusable extends Component {
+/**
+* A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
+*
+* Props:
+*   onFocus: (optional)
+*     A function that will be fired when the component is focused.
+*
+*   onUnfocus: (optional)
+*     A function that will be fired when the component is unfocused.
+*
+*   onClickEnter: (optional)
+*     A function that will be fired when the component is focused and enter key is pressed.
+*/
+class Focusable extends Component {
   componentFocused(e) {
     if (this.props.onFocus) {
       this.props.onFocus(e);
@@ -76,7 +94,7 @@ export class Focusable extends Component {
       <div className={classNames.join(" ")} ref={e => this.el = e} tabIndex="-1">
         {this.props.children}
       </div>
-    )
+    );
   }
 }
 
@@ -86,7 +104,27 @@ Focusable.contextTypes = {
 
 let sectionsIds = 1;
 
-export class FocusableSection extends Component {
+/*
+* A Focusable Section can specify a behaviour before focusing an element.
+* I.e. selecting a default element, the first element or an active one.
+*
+* Props:
+*   defaultElement: (default: '')
+*     The default element that will be focused when entering this section.
+*     This can be:
+*       * a valid selector string for "querySelectorAll".
+*       * a NodeList or an array containing DOM elements.
+*       * a single DOM element.
+*       * an empty string.
+*
+*   enterTo: (default: 'default-element')
+*     If the focus comes from another section, you can define which element in this section should be focused first.
+*     This can be:
+*       * 'last-focused' indicates the last focused element before we left this section last time. If this section has never been focused yet, the default element (if any) will be chosen next.
+*       * 'default-element' indicates the element defined in defaultElement.
+*       * an empty string.
+*/
+class FocusableSection extends Component {
   getChildContext() {
     return {focusableSectionId: this.sectionId};
   }
@@ -104,14 +142,12 @@ export class FocusableSection extends Component {
     const enterTo = this.props.enterTo === undefined ? 'default-element' : this.props.enterTo;
 
     if (defaultElement && defaultElement === 'first') {
-      defaultElement =  this._getSelector() + ':first-child';
+      defaultElement = this._getSelector() + ':first-child';
     }
 
     if (defaultElement && defaultElement === 'active') {
-      defaultElement =  this._getSelector() + '.active';
+      defaultElement = this._getSelector() + '.active';
     }
-
-    console.log(defaultElement, enterTo);
 
     JsSpatialNavigation.add({
       id: this.sectionId,
@@ -128,8 +164,12 @@ export class FocusableSection extends Component {
       </div>
     );
   }
-};
+}
 
 FocusableSection.childContextTypes = {
   focusableSectionId: PropTypes.number
 };
+
+export default SpatialNavigation;
+export Focusable;
+export FocusableSection;
