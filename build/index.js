@@ -1663,9 +1663,9 @@ var SpatialNavigation = function (_Component) {
         propsConfig.focusableClassName = this.props.focusableClassName;
       }
 
-      // React Custom: Set onCustomInit
-      if (typeof this.props.onCustomInit === 'function') {
-        propsConfig.onCustomInit = this.props.onCustomInit;
+      // React Custom: Set customInit
+      if (typeof this.props.customInit === 'function') {
+        propsConfig.customInit = this.props.customInit;
       }
 
       // Set defaultElement
@@ -1733,12 +1733,12 @@ var SpatialNavigation = function (_Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (!this.props.onCustomInit) {
+      if (!this.props.customInit) {
         _spatial_navigation2.default.init();
         _spatial_navigation2.default.add(config);
         _spatial_navigation2.default.focus();
       } else {
-        this.props.onCustomInit.call(this, config);
+        this.props.customInit.call(this, config);
       }
     }
   }, {
