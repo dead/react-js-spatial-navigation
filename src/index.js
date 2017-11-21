@@ -30,9 +30,9 @@ class SpatialNavigation extends Component {
       propsConfig.focusableClassName = this.props.focusableClassName;
     }
 
-    // React Custom: Set onCustomInit
-    if (typeof this.props.onCustomInit === 'function') {
-      propsConfig.onCustomInit = this.props.onCustomInit;
+    // React Custom: Set customInit
+    if (typeof this.props.customInit === 'function') {
+      propsConfig.customInit = this.props.customInit;
     }
 
     // Set defaultElement
@@ -98,13 +98,13 @@ class SpatialNavigation extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.onCustomInit) {
+    if (!this.props.customInit) {
       JsSpatialNavigation.init();
       JsSpatialNavigation.add(config);
       JsSpatialNavigation.focus();
 
     } else {
-      this.props.onCustomInit.call(this, config);
+      this.props.customInit.call(this, config);
     }
   }
   
