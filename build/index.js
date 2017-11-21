@@ -529,10 +529,17 @@ var _duringFocusChange = false;
 /************/
 /* Polyfill */
 /************/
-var elementMatchesSelector = Element.prototype.matches || Element.prototype.matchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector || function (selector) {
+var elementMatchesSelector;
+var elementMatchesFuncSelector = function elementMatchesFuncSelector(selector) {
   var matchedNodes = (this.parentNode || this.document).querySelectorAll(selector);
   return [].slice.call(matchedNodes).indexOf(this) >= 0;
 };
+
+if (typeof Element !== 'undefined') {
+  elementMatchesSelector = Element.prototype.matches || Element.prototype.matchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector || elementMatchesFuncSelector;
+} else {
+  elementMatchesSelector = elementMatchesFuncSelector;
+}
 
 /*****************/
 /* Core Function */
@@ -1593,7 +1600,9 @@ module.exports = require("react");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FocusableSection = exports.Focusable = undefined;
+exports.JsSpatialNavigation = exports.Focusable = exports.FocusableSection = exports.default = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1617,6 +1626,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var defaultConfig = {
+  activeClassName: 'active',
+  focusableClassName: 'focusable',
+  selector: '.focusable'
+};
+var config = {};
+
+/**
+* This component initialize the Spatial Navigation library.
+* It should be used only one time and in the root node of the application.
+* The spatial navigation only work within the Focusable components.
+*/
+
 var SpatialNavigation = function (_Component) {
   _inherits(SpatialNavigation, _Component);
 
@@ -1627,13 +1649,102 @@ var SpatialNavigation = function (_Component) {
   }
 
   _createClass(SpatialNavigation, [{
+    key: 'getConfigFromProps',
+    value: function getConfigFromProps() {
+      var propsConfig = {};
+
+      // React Custom: Set activeClassName
+      if (typeof this.props.activeClassName === 'string') {
+        propsConfig.activeClassName = this.props.activeClassName;
+      }
+
+      // React Custom: Set focusableClassName
+      if (typeof this.props.focusableClassName === 'string') {
+        propsConfig.focusableClassName = this.props.focusableClassName;
+      }
+
+      // React Custom: Set onCustomInit
+      if (typeof this.props.onCustomInit === 'function') {
+        propsConfig.onCustomInit = this.props.onCustomInit;
+      }
+
+      // Set defaultElement
+      if (typeof this.props.defaultElement === 'string') {
+        propsConfig.defaultElement = this.props.defaultElement;
+      }
+
+      // Set disabled
+      if (typeof this.props.disabled === 'boolean') {
+        propsConfig.disabled = this.props.disabled;
+      }
+
+      // Set enterTo
+      if (typeof this.props.enterTo === 'string') {
+        propsConfig.enterTo = this.props.enterTo;
+      }
+
+      // Set leaveFor
+      if (_typeof(this.props.leaveFor) === 'object') {
+        propsConfig.leaveFor = this.props.leaveFor;
+      }
+
+      // Set navigableFilter
+      if (typeof this.props.navigableFilter === 'function') {
+        propsConfig.navigableFilter = this.props.navigableFilter;
+      }
+
+      // Set rememberSource
+      if (typeof this.props.rememberSource === 'string') {
+        propsConfig.rememberSource = this.props.rememberSource;
+      }
+
+      // Set restrict
+      if (typeof this.props.restrict === 'string') {
+        propsConfig.restrict = this.props.restrict;
+      }
+
+      // Set selector
+      if (typeof this.props.selector === 'string') {
+        propsConfig.selector = this.props.selector;
+      }
+
+      // Set straightOnly
+      if (typeof this.props.straightOnly === 'boolean') {
+        propsConfig.straightOnly = this.props.straightOnly;
+      }
+
+      // Set straightOverlapThreshold
+      if (typeof this.props.straightOverlapThreshold === 'number') {
+        propsConfig.straightOverlapThreshold = this.props.straightOverlapThreshold;
+      }
+
+      // Set tabIndexIgnoreList
+      if (typeof this.props.tabIndexIgnoreList === 'string') {
+        propsConfig.tabIndexIgnoreList = this.props.tabIndexIgnoreList;
+      }
+
+      return propsConfig;
+    }
+  }, {
     key: 'componentWillMount',
     value: function componentWillMount() {
-      _spatial_navigation2.default.init();
-      _spatial_navigation2.default.add({
-        selector: '.focusable'
-      });
-      _spatial_navigation2.default.focus();
+      config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (!this.props.onCustomInit) {
+        _spatial_navigation2.default.init();
+        _spatial_navigation2.default.add(config);
+        _spatial_navigation2.default.focus();
+      } else {
+        this.props.onCustomInit.call(this, config);
+      }
+    }
+  }, {
+    key: 'componentWillUnount',
+    value: function componentWillUnount() {
+      _spatial_navigation2.default.uninit();
     }
   }, {
     key: 'render',
@@ -1649,14 +1760,25 @@ var SpatialNavigation = function (_Component) {
   return SpatialNavigation;
 }(_react.Component);
 
-exports.default = SpatialNavigation;
-;
-
 function getSectionSelectorFromId(id) {
   return 'section_' + id;
 }
 
-var Focusable = exports.Focusable = function (_Component2) {
+/**
+* A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
+*
+* Props:
+*   onFocus: (optional)
+*     A function that will be fired when the component is focused.
+*
+*   onUnfocus: (optional)
+*     A function that will be fired when the component is unfocused.
+*
+*   onClickEnter: (optional)
+*     A function that will be fired when the component is focused and enter key is pressed.
+*/
+
+var Focusable = function (_Component2) {
   _inherits(Focusable, _Component2);
 
   function Focusable() {
@@ -1721,10 +1843,10 @@ var Focusable = exports.Focusable = function (_Component2) {
     value: function render() {
       var _this3 = this;
 
-      var classNames = [this.context.focusableSectionId ? getSectionSelectorFromId(this.context.focusableSectionId) : "focusable"];
+      var classNames = [this.context.focusableSectionId ? getSectionSelectorFromId(this.context.focusableSectionId) : config.focusableClassName];
 
       if (this.props.active) {
-        classNames.push("active");
+        classNames.push(config.activeClassName);
       }
 
       if (this.props.className) {
@@ -1750,7 +1872,28 @@ Focusable.contextTypes = {
 
 var sectionsIds = 1;
 
-var FocusableSection = exports.FocusableSection = function (_Component3) {
+/*
+* A Focusable Section can specify a behaviour before focusing an element.
+* I.e. selecting a default element, the first element or an active one.
+*
+* Props:
+*   defaultElement: (default: '')
+*     The default element that will be focused when entering this section.
+*     This can be:
+*       * a valid selector string for "querySelectorAll".
+*       * a NodeList or an array containing DOM elements.
+*       * a single DOM element.
+*       * an empty string.
+*
+*   enterTo: (default: 'default-element')
+*     If the focus comes from another section, you can define which element in this section should be focused first.
+*     This can be:
+*       * 'last-focused' indicates the last focused element before we left this section last time. If this section has never been focused yet, the default element (if any) will be chosen next.
+*       * 'default-element' indicates the element defined in defaultElement.
+*       * an empty string.
+*/
+
+var FocusableSection = function (_Component3) {
   _inherits(FocusableSection, _Component3);
 
   function FocusableSection() {
@@ -1785,10 +1928,8 @@ var FocusableSection = exports.FocusableSection = function (_Component3) {
       }
 
       if (defaultElement && defaultElement === 'active') {
-        defaultElement = this._getSelector() + '.active';
+        defaultElement = this._getSelector() + ('.' + config.activeClassName);
       }
-
-      console.log(defaultElement, enterTo);
 
       _spatial_navigation2.default.add({
         id: this.sectionId,
@@ -1811,11 +1952,14 @@ var FocusableSection = exports.FocusableSection = function (_Component3) {
   return FocusableSection;
 }(_react.Component);
 
-;
-
 FocusableSection.childContextTypes = {
   focusableSectionId: _propTypes2.default.number
 };
+
+exports.default = SpatialNavigation;
+exports.FocusableSection = FocusableSection;
+exports.Focusable = Focusable;
+exports.JsSpatialNavigation = _spatial_navigation2.default;
 
 /***/ }),
 /* 9 */
