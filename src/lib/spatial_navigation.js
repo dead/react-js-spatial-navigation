@@ -69,18 +69,26 @@ var _duringFocusChange = false;
 /************/
 /* Polyfill */
 /************/
-var elementMatchesSelector =
-  Element.prototype.matches ||
-  Element.prototype.matchesSelector ||
-  Element.prototype.mozMatchesSelector ||
-  Element.prototype.webkitMatchesSelector ||
-  Element.prototype.msMatchesSelector ||
-  Element.prototype.oMatchesSelector ||
-  function (selector) {
-    var matchedNodes =
-      (this.parentNode || this.document).querySelectorAll(selector);
-    return [].slice.call(matchedNodes).indexOf(this) >= 0;
-  };
+var elementMatchesSelector;
+var elementMatchesFuncSelector = function(selector) {
+  var matchedNodes = (this.parentNode || this.document).querySelectorAll(
+    selector
+  );
+  return [].slice.call(matchedNodes).indexOf(this) >= 0;
+};
+
+if (typeof Element !== 'undefined') {
+  elementMatchesSelector =
+    Element.prototype.matches ||
+    Element.prototype.matchesSelector ||
+    Element.prototype.mozMatchesSelector ||
+    Element.prototype.webkitMatchesSelector ||
+    Element.prototype.msMatchesSelector ||
+    Element.prototype.oMatchesSelector ||
+    elementMatchesFuncSelector;
+} else {
+  elementMatchesSelector = elementMatchesFuncSelector;
+}
 
 /*****************/
 /* Core Function */

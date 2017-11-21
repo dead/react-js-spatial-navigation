@@ -3,18 +3,113 @@ import PropTypes from 'prop-types';
 
 import JsSpatialNavigation from './lib/spatial_navigation.js';
 
+const defaultConfig = {
+  activeClassName: 'active',
+  focusableClassName: 'focusable',
+  selector: '.focusable',
+};
+let config = {};
+
 /**
 * This component initialize the Spatial Navigation library.
 * It should be used only one time and in the root node of the application.
 * The spatial navigation only work within the Focusable components.
 */
 class SpatialNavigation extends Component {
+
+  getConfigFromProps() {
+    let propsConfig = {};
+    
+    // React Custom: Set activeClassName
+    if (typeof this.props.activeClassName === 'string') {
+      propsConfig.activeClassName = this.props.activeClassName;
+    }
+
+    // React Custom: Set focusableClassName
+    if (typeof this.props.focusableClassName === 'string') {
+      propsConfig.focusableClassName = this.props.focusableClassName;
+    }
+
+    // React Custom: Set customInit
+    if (typeof this.props.customInit === 'function') {
+      propsConfig.customInit = this.props.customInit;
+    }
+
+    // Set defaultElement
+    if (typeof this.props.defaultElement === 'string') {
+      propsConfig.defaultElement = this.props.defaultElement;
+    }
+
+    // Set disabled
+    if (typeof this.props.disabled === 'boolean') {
+      propsConfig.disabled = this.props.disabled;
+    }
+
+    // Set enterTo
+    if (typeof this.props.enterTo === 'string') {
+      propsConfig.enterTo = this.props.enterTo;
+    }
+
+    // Set leaveFor
+    if (typeof this.props.leaveFor === 'object') {
+      propsConfig.leaveFor = this.props.leaveFor;
+    }
+
+    // Set navigableFilter
+    if (typeof this.props.navigableFilter === 'function') {
+      propsConfig.navigableFilter = this.props.navigableFilter;
+    }
+
+    // Set rememberSource
+    if (typeof this.props.rememberSource === 'string') {
+      propsConfig.rememberSource = this.props.rememberSource;
+    }
+
+    // Set restrict
+    if (typeof this.props.restrict === 'string') {
+      propsConfig.restrict = this.props.restrict;
+    }
+
+    // Set selector
+    if (typeof this.props.selector === 'string') {
+      propsConfig.selector = this.props.selector;
+    }
+
+    // Set straightOnly
+    if (typeof this.props.straightOnly === 'boolean') {
+      propsConfig.straightOnly = this.props.straightOnly;
+    }
+
+    // Set straightOverlapThreshold
+    if (typeof this.props.straightOverlapThreshold === 'number') {
+      propsConfig.straightOverlapThreshold = this.props.straightOverlapThreshold;
+    }
+
+    // Set tabIndexIgnoreList
+    if (typeof this.props.tabIndexIgnoreList === 'string') {
+      propsConfig.tabIndexIgnoreList = this.props.tabIndexIgnoreList;
+    }
+
+    return propsConfig;
+  }
+
   componentWillMount() {
-    JsSpatialNavigation.init();
-    JsSpatialNavigation.add({
-      selector: '.focusable'
-    });
-    JsSpatialNavigation.focus();
+    config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
+  }
+
+  componentDidMount() {
+    if (!this.props.customInit) {
+      JsSpatialNavigation.init();
+      JsSpatialNavigation.add(config);
+      JsSpatialNavigation.focus();
+
+    } else {
+      this.props.customInit.call(this, config);
+    }
+  }
+  
+  componentWillUnount() {
+    JsSpatialNavigation.uninit();
   }
 
   render() {
@@ -80,10 +175,10 @@ class Focusable extends Component {
   }
 
   render() {
-    let classNames = [this.context.focusableSectionId ? getSectionSelectorFromId(this.context.focusableSectionId) : "focusable"];
+    let classNames = [this.context.focusableSectionId ? getSectionSelectorFromId(this.context.focusableSectionId) : config.focusableClassName];
 
     if (this.props.active) {
-      classNames.push("active");
+      classNames.push(config.activeClassName);
     }
 
     if (this.props.className) {
@@ -146,7 +241,7 @@ class FocusableSection extends Component {
     }
 
     if (defaultElement && defaultElement === 'active') {
-      defaultElement = this._getSelector() + '.active';
+      defaultElement = this._getSelector() + `.${config.activeClassName}`;
     }
 
     JsSpatialNavigation.add({
@@ -170,6 +265,5 @@ FocusableSection.childContextTypes = {
   focusableSectionId: PropTypes.number
 };
 
-export default SpatialNavigation;
-export Focusable;
-export FocusableSection;
+
+export { SpatialNavigation as default, FocusableSection, Focusable, JsSpatialNavigation };
