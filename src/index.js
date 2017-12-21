@@ -19,7 +19,7 @@ class SpatialNavigation extends Component {
 
   getConfigFromProps() {
     let propsConfig = {};
-    
+
     // React Custom: Set activeClassName
     if (typeof this.props.activeClassName === 'string') {
       propsConfig.activeClassName = this.props.activeClassName;
@@ -108,7 +108,7 @@ class SpatialNavigation extends Component {
     }
   }
   
-  componentWillUnount() {
+  componentWillUnmount() {
     JsSpatialNavigation.uninit();
   }
 
