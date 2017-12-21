@@ -1742,8 +1742,8 @@ var SpatialNavigation = function (_Component) {
       }
     }
   }, {
-    key: 'componentWillUnount',
-    value: function componentWillUnount() {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
       _spatial_navigation2.default.uninit();
     }
   }, {
@@ -1760,8 +1760,8 @@ var SpatialNavigation = function (_Component) {
   return SpatialNavigation;
 }(_react.Component);
 
-function getSectionSelectorFromId(id) {
-  return 'section_' + id;
+function getSelector(id) {
+  return '.' + id;
 }
 
 /**
@@ -1843,7 +1843,7 @@ var Focusable = function (_Component2) {
     value: function render() {
       var _this3 = this;
 
-      var classNames = [this.context.focusableSectionId ? getSectionSelectorFromId(this.context.focusableSectionId) : config.focusableClassName];
+      var classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
       if (this.props.active) {
         classNames.push(config.activeClassName);
@@ -1867,10 +1867,8 @@ var Focusable = function (_Component2) {
 }(_react.Component);
 
 Focusable.contextTypes = {
-  focusableSectionId: _propTypes2.default.number
+  focusableSectionId: _propTypes2.default.string
 };
-
-var sectionsIds = 1;
 
 /*
 * A Focusable Section can specify a behaviour before focusing an element.
@@ -1910,12 +1908,17 @@ var FocusableSection = function (_Component3) {
   }, {
     key: 'componentWillMount',
     value: function componentWillMount() {
-      this.sectionId = sectionsIds++;
+      this.sectionId = _spatial_navigation2.default.add({});
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      _spatial_navigation2.default.remove(this.sectionId);
     }
   }, {
     key: '_getSelector',
     value: function _getSelector() {
-      return '.' + getSectionSelectorFromId(this.sectionId);
+      return getSelector(this.sectionId);
     }
   }, {
     key: 'componentDidMount',
@@ -1931,8 +1934,7 @@ var FocusableSection = function (_Component3) {
         defaultElement = this._getSelector() + ('.' + config.activeClassName);
       }
 
-      _spatial_navigation2.default.add({
-        id: this.sectionId,
+      _spatial_navigation2.default.set(this.sectionId, {
         selector: this._getSelector(),
         enterTo: enterTo,
         defaultElement: defaultElement
@@ -1953,7 +1955,7 @@ var FocusableSection = function (_Component3) {
 }(_react.Component);
 
 FocusableSection.childContextTypes = {
-  focusableSectionId: _propTypes2.default.number
+  focusableSectionId: _propTypes2.default.string
 };
 
 exports.default = SpatialNavigation;
