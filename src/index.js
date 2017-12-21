@@ -119,8 +119,8 @@ class SpatialNavigation extends Component {
   }
 }
 
-function getSectionSelectorFromId(id) {
-  return 'section_' + id;
+function getSelector(id) {
+  return `.${id}`;
 }
 
 /**
@@ -175,7 +175,7 @@ class Focusable extends Component {
   }
 
   render() {
-    let classNames = [this.context.focusableSectionId ? getSectionSelectorFromId(this.context.focusableSectionId) : config.focusableClassName];
+    let classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
     if (this.props.active) {
       classNames.push(config.activeClassName);
@@ -194,10 +194,8 @@ class Focusable extends Component {
 }
 
 Focusable.contextTypes = {
-  focusableSectionId: PropTypes.number
+  focusableSectionId: PropTypes.string
 };
-
-let sectionsIds = 1;
 
 /*
 * A Focusable Section can specify a behaviour before focusing an element.
@@ -225,7 +223,7 @@ class FocusableSection extends Component {
   }
 
   componentWillMount() {
-    this.sectionId = sectionsIds++;
+    this.sectionId = JsSpatialNavigation.add({});
   }
 
   componentWillUnmount() {
@@ -233,7 +231,7 @@ class FocusableSection extends Component {
   }
 
   _getSelector() {
-    return '.' + getSectionSelectorFromId(this.sectionId);
+    return getSelector(this.sectionId);
   }
 
   componentDidMount() {
@@ -248,8 +246,7 @@ class FocusableSection extends Component {
       defaultElement = this._getSelector() + `.${config.activeClassName}`;
     }
 
-    JsSpatialNavigation.add({
-      id: this.sectionId,
+    JsSpatialNavigation.set(this.sectionId, {
       selector: this._getSelector(),
       enterTo: enterTo,
       defaultElement: defaultElement
@@ -266,7 +263,7 @@ class FocusableSection extends Component {
 }
 
 FocusableSection.childContextTypes = {
-  focusableSectionId: PropTypes.number
+  focusableSectionId: PropTypes.string
 };
 
 
