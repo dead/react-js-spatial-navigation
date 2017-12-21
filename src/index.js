@@ -107,7 +107,7 @@ class SpatialNavigation extends Component {
       this.props.customInit.call(this, config);
     }
   }
-  
+
   componentWillUnmount() {
     JsSpatialNavigation.uninit();
   }
@@ -226,6 +226,10 @@ class FocusableSection extends Component {
 
   componentWillMount() {
     this.sectionId = sectionsIds++;
+  }
+
+  componentWillUnmount() {
+    JsSpatialNavigation.remove(this.sectionId);
   }
 
   _getSelector() {
