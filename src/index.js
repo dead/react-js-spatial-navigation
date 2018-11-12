@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import JsSpatialNavigation from './lib/spatial_navigation.js';
@@ -11,10 +11,10 @@ const defaultConfig = {
 let config = {};
 
 /**
-* This component initialize the Spatial Navigation library.
-* It should be used only one time and in the root node of the application.
-* The spatial navigation only work within the Focusable components.
-*/
+ * This component initialize the Spatial Navigation library.
+ * It should be used only one time and in the root node of the application.
+ * The spatial navigation only work within the Focusable components.
+ */
 class SpatialNavigation extends Component {
 
   getConfigFromProps() {
@@ -124,18 +124,18 @@ function getSelector(id) {
 }
 
 /**
-* A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
-*
-* Props:
-*   onFocus: (optional)
-*     A function that will be fired when the component is focused.
-*
-*   onUnfocus: (optional)
-*     A function that will be fired when the component is unfocused.
-*
-*   onClickEnter: (optional)
-*     A function that will be fired when the component is focused and enter key is pressed.
-*/
+ * A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
+ *
+ * Props:
+ *   onFocus: (optional)
+ *     A function that will be fired when the component is focused.
+ *
+ *   onUnfocus: (optional)
+ *     A function that will be fired when the component is unfocused.
+ *
+ *   onClickEnter: (optional)
+ *     A function that will be fired when the component is focused and enter key is pressed.
+ */
 class Focusable extends Component {
   componentFocused(e) {
     if (this.props.onFocus) {
@@ -287,19 +287,19 @@ class FocusableSection extends Component {
       defaultElement = this._getSelector() + `.${config.activeClassName}`;
     }
 
-    if(typeof this.props.neighborLeft === 'string') {
+    if (typeof this.props.neighborLeft === 'string') {
       leaveFor.left = `@${this.props.neighborLeft}`;
     }
 
-    if(typeof this.props.neighborRight === 'string') {
+    if (typeof this.props.neighborRight === 'string') {
       leaveFor.right = `@${this.props.neighborRight}`;
     }
 
-    if(typeof this.props.neighborUp === 'string') {
+    if (typeof this.props.neighborUp === 'string') {
       leaveFor.up = `@${this.props.neighborUp}`;
     }
 
-    if(typeof this.props.neighborDown === 'string') {
+    if (typeof this.props.neighborDown === 'string') {
       leaveFor.down = `@${this.props.neighborDown}`;
     }
 
@@ -325,4 +325,4 @@ FocusableSection.childContextTypes = {
 };
 
 
-export { SpatialNavigation as default, FocusableSection, Focusable, JsSpatialNavigation };
+export {SpatialNavigation as default, FocusableSection, Focusable, JsSpatialNavigation};
