@@ -1463,10 +1463,10 @@ var defaultConfig = {
 var config = {};
 
 /**
-* This component initialize the Spatial Navigation library.
-* It should be used only one time and in the root node of the application.
-* The spatial navigation only work within the Focusable components.
-*/
+ * This component initialize the Spatial Navigation library.
+ * It should be used only one time and in the root node of the application.
+ * The spatial navigation only work within the Focusable components.
+ */
 
 var SpatialNavigation = function (_Component) {
   _inherits(SpatialNavigation, _Component);
@@ -1578,9 +1578,15 @@ var SpatialNavigation = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var classNames = [];
+
+      if (this.props.className) {
+        classNames.push(this.props.className);
+      }
+
       return _react2.default.createElement(
         'div',
-        null,
+        { className: classNames.join(" ") },
         this.props.children
       );
     }
@@ -1594,18 +1600,18 @@ function getSelector(id) {
 }
 
 /**
-* A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
-*
-* Props:
-*   onFocus: (optional)
-*     A function that will be fired when the component is focused.
-*
-*   onUnfocus: (optional)
-*     A function that will be fired when the component is unfocused.
-*
-*   onClickEnter: (optional)
-*     A function that will be fired when the component is focused and enter key is pressed.
-*/
+ * A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
+ *
+ * Props:
+ *   onFocus: (optional)
+ *     A function that will be fired when the component is focused.
+ *
+ *   onUnfocus: (optional)
+ *     A function that will be fired when the component is unfocused.
+ *
+ *   onClickEnter: (optional)
+ *     A function that will be fired when the component is focused and enter key is pressed.
+ */
 
 var Focusable = function (_Component2) {
   _inherits(Focusable, _Component2);
@@ -1812,9 +1818,15 @@ var FocusableSection = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
+      var classNames = [];
+
+      if (this.props.className) {
+        classNames.push(this.props.className);
+      }
+
       return _react2.default.createElement(
         'div',
-        null,
+        { className: classNames.join(" ") },
         this.props.children
       );
     }
