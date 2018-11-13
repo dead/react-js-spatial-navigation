@@ -1603,6 +1603,11 @@ function getSelector(id) {
  * A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
  *
  * Props:
+ *
+ *   onBeforeFocus: (optional)
+ *     A function that will be fired when the comonent is about to be focused, can be used
+ *     to scroll items into view, fire an animation, etc.
+ *
  *   onFocus: (optional)
  *     A function that will be fired when the component is focused.
  *
@@ -1627,7 +1632,9 @@ var Focusable = function (_Component2) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Focusable.__proto__ || Object.getPrototypeOf(Focusable)).call.apply(_ref, [this].concat(args))), _this2), _this2._componentFocused = function (event) {
+    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Focusable.__proto__ || Object.getPrototypeOf(Focusable)).call.apply(_ref, [this].concat(args))), _this2), _this2._componentWillFocus = function (event) {
+      return _this2.componentWillFocus(event);
+    }, _this2._componentFocused = function (event) {
       return _this2.componentFocused(event);
     }, _this2._componentUnfocused = function (event) {
       return _this2.componentUnfocused(event);
@@ -1637,6 +1644,13 @@ var Focusable = function (_Component2) {
   }
 
   _createClass(Focusable, [{
+    key: 'componentWillFocus',
+    value: function componentWillFocus(e) {
+      if (this.props.onBeforeFocus) {
+        this.props.onBeforeFocus(e);
+      }
+    }
+  }, {
     key: 'componentFocused',
     value: function componentFocused(e) {
       if (this.props.onFocus) {
@@ -1662,6 +1676,7 @@ var Focusable = function (_Component2) {
     value: function componentDidMount() {
       if (!this.el) return;
 
+      this.el.addEventListener("sn:willfocus", this._componentWillFocus);
       this.el.addEventListener("sn:focused", this._componentFocused);
       this.el.addEventListener("sn:unfocused", this._componentUnfocused);
       this.el.addEventListener("sn:enter-up", this._componentClickEnter);
