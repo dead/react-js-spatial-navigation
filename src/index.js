@@ -113,8 +113,14 @@ class SpatialNavigation extends Component {
   }
 
   render() {
+    let classNames = [];
+
+    if (this.props.className) {
+      classNames.push(this.props.className);
+    }
+
     return (
-      <div>{this.props.children}</div>
+      <div className={classNames.join(" ")}>{this.props.children}</div>
     );
   }
 }
@@ -312,8 +318,14 @@ class FocusableSection extends Component {
   }
 
   render() {
+    let classNames = [];
+
+    if (this.props.className) {
+      classNames.push(this.props.className);
+    }
+
     return (
-      <div>
+      <div className={classNames.join(" ")}>
         {this.props.children}
       </div>
     );
