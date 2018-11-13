@@ -133,6 +133,11 @@ function getSelector(id) {
  * A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
  *
  * Props:
+ *
+ *   onBeforeFocus: (optional)
+ *     A function that will be fired when the comonent is about to be focused, can be used
+ *     to scroll items into view, fire an animation, etc.
+ *
  *   onFocus: (optional)
  *     A function that will be fired when the component is focused.
  *
@@ -143,6 +148,11 @@ function getSelector(id) {
  *     A function that will be fired when the component is focused and enter key is pressed.
  */
 class Focusable extends Component {
+  componentWillFocus(e) {
+    if (this.props.onBeforeFocus) {
+      this.props.onBeforeFocus(e);
+    }
+  }
   componentFocused(e) {
     if (this.props.onFocus) {
       this.props.onFocus(e);
@@ -161,6 +171,7 @@ class Focusable extends Component {
     }
   }
 
+  _componentWillFocus = (event) => this.componentWillFocus(event);
   _componentFocused = (event) => this.componentFocused(event);
   _componentUnfocused = (event) => this.componentUnfocused(event);
   _componentClickEnter = (event) => this.componentClickEnter(event);
@@ -169,6 +180,7 @@ class Focusable extends Component {
     if (!this.el)
       return;
 
+    this.el.addEventListener("sn:willfocus", this._componentWillFocus);
     this.el.addEventListener("sn:focused", this._componentFocused);
     this.el.addEventListener("sn:unfocused", this._componentUnfocused);
     this.el.addEventListener("sn:enter-up", this._componentClickEnter);
