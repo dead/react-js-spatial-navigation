@@ -1767,10 +1767,15 @@ Focusable.contextTypes = {
 var FocusableSection = function (_Component3) {
   _inherits(FocusableSection, _Component3);
 
-  function FocusableSection() {
+  function FocusableSection(props) {
     _classCallCheck(this, FocusableSection);
 
-    return _possibleConstructorReturn(this, (FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).apply(this, arguments));
+    var _this4 = _possibleConstructorReturn(this, (FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call(this, props));
+
+    _this4.sectionId = _spatial_navigation2.default.add({
+      id: props.sectionId
+    });
+    return _this4;
   }
 
   _createClass(FocusableSection, [{
@@ -1791,10 +1796,6 @@ var FocusableSection = function (_Component3) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.sectionId = _spatial_navigation2.default.add({
-        id: this.props.sectionId
-      });
-
       var defaultElement = this.props.defaultElement;
       var leaveFor = {};
       var enterTo = this.props.enterTo === undefined ? 'default-element' : this.props.enterTo;
