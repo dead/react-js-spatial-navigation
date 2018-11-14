@@ -258,6 +258,13 @@ class FocusableSection extends Component {
     neighborLeft: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.sectionId = JsSpatialNavigation.add({
+      id: props.sectionId
+    });
+  }
+
   getChildContext() {
     return {focusableSectionId: this.sectionId};
   }
@@ -271,10 +278,6 @@ class FocusableSection extends Component {
   }
 
   componentDidMount() {
-    this.sectionId = JsSpatialNavigation.add({
-      id: this.props.sectionId
-    });
-
     let defaultElement = this.props.defaultElement;
     let leaveFor = {};
     const enterTo = this.props.enterTo === undefined ? 'default-element' : this.props.enterTo;

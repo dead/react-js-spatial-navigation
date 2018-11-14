@@ -1463,10 +1463,10 @@ var defaultConfig = {
 var config = {};
 
 /**
-* This component initialize the Spatial Navigation library.
-* It should be used only one time and in the root node of the application.
-* The spatial navigation only work within the Focusable components.
-*/
+ * This component initialize the Spatial Navigation library.
+ * It should be used only one time and in the root node of the application.
+ * The spatial navigation only work within the Focusable components.
+ */
 
 var SpatialNavigation = function (_Component) {
   _inherits(SpatialNavigation, _Component);
@@ -1594,18 +1594,18 @@ function getSelector(id) {
 }
 
 /**
-* A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
-*
-* Props:
-*   onFocus: (optional)
-*     A function that will be fired when the component is focused.
-*
-*   onUnfocus: (optional)
-*     A function that will be fired when the component is unfocused.
-*
-*   onClickEnter: (optional)
-*     A function that will be fired when the component is focused and enter key is pressed.
-*/
+ * A Focusable component that handle the onFocus, onUnfocus, onClickEnter events.
+ *
+ * Props:
+ *   onFocus: (optional)
+ *     A function that will be fired when the component is focused.
+ *
+ *   onUnfocus: (optional)
+ *     A function that will be fired when the component is unfocused.
+ *
+ *   onClickEnter: (optional)
+ *     A function that will be fired when the component is focused and enter key is pressed.
+ */
 
 var Focusable = function (_Component2) {
   _inherits(Focusable, _Component2);
@@ -1746,10 +1746,15 @@ Focusable.contextTypes = {
 var FocusableSection = function (_Component3) {
   _inherits(FocusableSection, _Component3);
 
-  function FocusableSection() {
+  function FocusableSection(props) {
     _classCallCheck(this, FocusableSection);
 
-    return _possibleConstructorReturn(this, (FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).apply(this, arguments));
+    var _this4 = _possibleConstructorReturn(this, (FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call(this, props));
+
+    _this4.sectionId = _spatial_navigation2.default.add({
+      id: props.sectionId
+    });
+    return _this4;
   }
 
   _createClass(FocusableSection, [{
@@ -1770,10 +1775,6 @@ var FocusableSection = function (_Component3) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.sectionId = _spatial_navigation2.default.add({
-        id: this.props.sectionId
-      });
-
       var defaultElement = this.props.defaultElement;
       var leaveFor = {};
       var enterTo = this.props.enterTo === undefined ? 'default-element' : this.props.enterTo;
