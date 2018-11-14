@@ -1809,19 +1809,19 @@ var FocusableSection = function (_Component3) {
       }
 
       if (typeof this.props.neighborLeft === 'string') {
-        leaveFor.left = '@' + this.props.neighborLeft;
+        leaveFor.left = this.props.neighborLeft;
       }
 
       if (typeof this.props.neighborRight === 'string') {
-        leaveFor.right = '@' + this.props.neighborRight;
+        leaveFor.right = this.props.neighborRight;
       }
 
       if (typeof this.props.neighborUp === 'string') {
-        leaveFor.up = '@' + this.props.neighborUp;
+        leaveFor.up = this.props.neighborUp;
       }
 
       if (typeof this.props.neighborDown === 'string') {
-        leaveFor.down = '@' + this.props.neighborDown;
+        leaveFor.down = this.props.neighborDown;
       }
 
       _spatial_navigation2.default.set(this.sectionId, {
