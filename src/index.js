@@ -260,6 +260,8 @@ Focusable.contextTypes = {
 */
 class FocusableSection extends Component {
 
+  static counter = 0;
+
   static propTypes = {
     sectionId: PropTypes.string,
     neighborUp: PropTypes.string,
@@ -278,9 +280,12 @@ class FocusableSection extends Component {
 
   constructor(props) {
     super(props);
-    this.sectionId = JsSpatialNavigation.add({
-      id: props.sectionId
-    });
+    if(props.sectionId) {
+      this.sectionId = props.sectionId;
+    } else {
+      this.sectionId = 'section-' + FocusableSection.counter;
+      FocusableSection.counter++;
+    }
   }
 
   getChildContext() {
@@ -324,7 +329,7 @@ class FocusableSection extends Component {
       leaveFor.down = this.props.neighborDown;
     }
 
-    JsSpatialNavigation.set(this.sectionId, {
+    JsSpatialNavigation.add(this.sectionId, {
       selector: this._getSelector(),
       enterTo: enterTo,
       defaultElement: defaultElement,

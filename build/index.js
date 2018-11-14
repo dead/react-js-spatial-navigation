@@ -1772,9 +1772,12 @@ var FocusableSection = function (_Component3) {
 
     var _this4 = _possibleConstructorReturn(this, (FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call(this, props));
 
-    _this4.sectionId = _spatial_navigation2.default.add({
-      id: props.sectionId
-    });
+    if (props.sectionId) {
+      _this4.sectionId = props.sectionId;
+    } else {
+      _this4.sectionId = 'section-' + FocusableSection.counter;
+      FocusableSection.counter++;
+    }
     return _this4;
   }
 
@@ -1824,7 +1827,7 @@ var FocusableSection = function (_Component3) {
         leaveFor.down = this.props.neighborDown;
       }
 
-      _spatial_navigation2.default.set(this.sectionId, {
+      _spatial_navigation2.default.add(this.sectionId, {
         selector: this._getSelector(),
         enterTo: enterTo,
         defaultElement: defaultElement,
@@ -1851,6 +1854,7 @@ var FocusableSection = function (_Component3) {
   return FocusableSection;
 }(_react.Component);
 
+FocusableSection.counter = 0;
 FocusableSection.propTypes = {
   sectionId: _propTypes2.default.string,
   neighborUp: _propTypes2.default.string,
