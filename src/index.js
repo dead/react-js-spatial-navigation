@@ -114,19 +114,13 @@ class SpatialNavigation extends Component {
 
   render() {
     let classNames = [];
-    let aria = {};
-    for (let key in this.props) {
-      if (key.indexOf('aria') === 0) {
-        aria[key] = this.props[key];
-      }
-    }
 
     if (this.props.className) {
       classNames.push(this.props.className);
     }
 
     return (
-      <div {...aria} className={classNames.join(' ')}>{this.props.children}</div>
+      <div className={classNames.join(' ')}>{this.props.children}</div>
     );
   }
 }
@@ -202,6 +196,13 @@ class Focusable extends Component {
   render() {
     let classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
+    let aria = {};
+    for (let key in this.props) {
+      if (key.indexOf('aria') === 0) {
+        aria[key] = this.props[key];
+      }
+    }
+
     if (this.props.active) {
       classNames.push(config.activeClassName);
     }
@@ -211,7 +212,7 @@ class Focusable extends Component {
     }
 
     return (
-      <div className={classNames.join(' ')} ref={e => this.el = e} tabIndex="-1">
+      <div {...aria} className={classNames.join(' ')} ref={e => this.el = e} tabIndex="-1">
         {this.props.children}
       </div>
     );
