@@ -114,13 +114,19 @@ class SpatialNavigation extends Component {
 
   render() {
     let classNames = [];
+    let aria = {};
+    for (let key in this.props) {
+      if (key.indexOf('aria') === 0) {
+        aria[key] = this.props[key];
+      }
+    }
 
     if (this.props.className) {
       classNames.push(this.props.className);
     }
 
     return (
-      <div className={classNames.join(" ")}>{this.props.children}</div>
+      <div {...aria} className={classNames.join(' ')}>{this.props.children}</div>
     );
   }
 }
@@ -153,6 +159,7 @@ class Focusable extends Component {
       this.props.onBeforeFocus(e);
     }
   }
+
   componentFocused(e) {
     if (this.props.onFocus) {
       this.props.onFocus(e);
@@ -180,16 +187,16 @@ class Focusable extends Component {
     if (!this.el)
       return;
 
-    this.el.addEventListener("sn:willfocus", this._componentWillFocus);
-    this.el.addEventListener("sn:focused", this._componentFocused);
-    this.el.addEventListener("sn:unfocused", this._componentUnfocused);
-    this.el.addEventListener("sn:enter-up", this._componentClickEnter);
+    this.el.addEventListener('sn:willfocus', this._componentWillFocus);
+    this.el.addEventListener('sn:focused', this._componentFocused);
+    this.el.addEventListener('sn:unfocused', this._componentUnfocused);
+    this.el.addEventListener('sn:enter-up', this._componentClickEnter);
   }
 
   componentWillUnmount() {
-    this.el.removeEventListener("sn:focused", this._componentFocused);
-    this.el.removeEventListener("sn:unfocused", this._componentUnfocused);
-    this.el.removeEventListener("sn:enter-up", this._componentClickEnter);
+    this.el.removeEventListener('sn:focused', this._componentFocused);
+    this.el.removeEventListener('sn:unfocused', this._componentUnfocused);
+    this.el.removeEventListener('sn:enter-up', this._componentClickEnter);
   }
 
   render() {
@@ -204,7 +211,7 @@ class Focusable extends Component {
     }
 
     return (
-      <div className={classNames.join(" ")} ref={e => this.el = e} tabIndex="-1">
+      <div className={classNames.join(' ')} ref={e => this.el = e} tabIndex="-1">
         {this.props.children}
       </div>
     );
@@ -280,7 +287,7 @@ class FocusableSection extends Component {
 
   constructor(props) {
     super(props);
-    if(props.sectionId) {
+    if (props.sectionId) {
       this.sectionId = props.sectionId;
     } else {
       this.sectionId = 'section-' + FocusableSection.counter;
@@ -345,7 +352,7 @@ class FocusableSection extends Component {
     }
 
     return (
-      <div className={classNames.join(" ")}>
+      <div className={classNames.join(' ')}>
         {this.props.children}
       </div>
     );
