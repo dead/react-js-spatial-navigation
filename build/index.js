@@ -1431,6 +1431,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.JsSpatialNavigation = exports.Focusable = exports.FocusableSection = exports.default = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1579,6 +1581,12 @@ var SpatialNavigation = function (_Component) {
     key: 'render',
     value: function render() {
       var classNames = [];
+      var aria = {};
+      for (var key in this.props) {
+        if (key.indexOf('aria') === 0) {
+          aria[key] = this.props[key];
+        }
+      }
 
       if (this.props.className) {
         classNames.push(this.props.className);
@@ -1586,7 +1594,7 @@ var SpatialNavigation = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: classNames.join(" ") },
+        _extends({}, aria, { className: classNames.join(' ') }),
         this.props.children
       );
     }
@@ -1676,17 +1684,17 @@ var Focusable = function (_Component2) {
     value: function componentDidMount() {
       if (!this.el) return;
 
-      this.el.addEventListener("sn:willfocus", this._componentWillFocus);
-      this.el.addEventListener("sn:focused", this._componentFocused);
-      this.el.addEventListener("sn:unfocused", this._componentUnfocused);
-      this.el.addEventListener("sn:enter-up", this._componentClickEnter);
+      this.el.addEventListener('sn:willfocus', this._componentWillFocus);
+      this.el.addEventListener('sn:focused', this._componentFocused);
+      this.el.addEventListener('sn:unfocused', this._componentUnfocused);
+      this.el.addEventListener('sn:enter-up', this._componentClickEnter);
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.el.removeEventListener("sn:focused", this._componentFocused);
-      this.el.removeEventListener("sn:unfocused", this._componentUnfocused);
-      this.el.removeEventListener("sn:enter-up", this._componentClickEnter);
+      this.el.removeEventListener('sn:focused', this._componentFocused);
+      this.el.removeEventListener('sn:unfocused', this._componentUnfocused);
+      this.el.removeEventListener('sn:enter-up', this._componentClickEnter);
     }
   }, {
     key: 'render',
@@ -1705,7 +1713,7 @@ var Focusable = function (_Component2) {
 
       return _react2.default.createElement(
         'div',
-        { className: classNames.join(" "), ref: function ref(e) {
+        { className: classNames.join(' '), ref: function ref(e) {
             return _this3.el = e;
           }, tabIndex: '-1' },
         this.props.children
@@ -1845,7 +1853,7 @@ var FocusableSection = function (_Component3) {
 
       return _react2.default.createElement(
         'div',
-        { className: classNames.join(" ") },
+        { className: classNames.join(' ') },
         this.props.children
       );
     }
