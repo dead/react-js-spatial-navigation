@@ -1581,12 +1581,6 @@ var SpatialNavigation = function (_Component) {
     key: 'render',
     value: function render() {
       var classNames = [];
-      var aria = {};
-      for (var key in this.props) {
-        if (key.indexOf('aria') === 0) {
-          aria[key] = this.props[key];
-        }
-      }
 
       if (this.props.className) {
         classNames.push(this.props.className);
@@ -1594,7 +1588,7 @@ var SpatialNavigation = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        _extends({}, aria, { className: classNames.join(' ') }),
+        { className: classNames.join(' ') },
         this.props.children
       );
     }
@@ -1703,6 +1697,13 @@ var Focusable = function (_Component2) {
 
       var classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
+      var aria = {};
+      for (var key in this.props) {
+        if (key.indexOf('aria') === 0) {
+          aria[key] = this.props[key];
+        }
+      }
+
       if (this.props.active) {
         classNames.push(config.activeClassName);
       }
@@ -1713,9 +1714,9 @@ var Focusable = function (_Component2) {
 
       return _react2.default.createElement(
         'div',
-        { className: classNames.join(' '), ref: function ref(e) {
+        _extends({}, aria, { className: classNames.join(' '), ref: function ref(e) {
             return _this3.el = e;
-          }, tabIndex: '-1' },
+          }, tabIndex: '-1' }),
         this.props.children
       );
     }
