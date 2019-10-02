@@ -145,7 +145,13 @@ function getSelector(id) {
  *     A function that will be fired when the component is unfocused.
  *
  *   onClickEnter: (optional)
- *     A function that will be fired when the component is focused and enter key is pressed.
+ *     A function that will be fired when the component is focused and enter key is pressed. *
+ *
+ *   onKeyDown: (optional)
+ *     A function that will be fired when any key is pressed on the component. *
+ *
+ *   onKeyUp: (optional)
+ *     A function that will be fired when any key is released on the component
  */
 class Focusable extends Component {
   componentWillFocus(e) {
@@ -172,10 +178,23 @@ class Focusable extends Component {
     }
   }
 
+  componentKeyDown(e) {
+    if (this.props.onKeyDown) {
+      this.props.onKeyDown(e);
+    }
+  }
+  componentKeyUp(e) {
+    if (this.props.onKeyUp) {
+      this.props.onKeyUp(e);
+    }
+  }
+
   _componentWillFocus = (event) => this.componentWillFocus(event);
   _componentFocused = (event) => this.componentFocused(event);
   _componentUnfocused = (event) => this.componentUnfocused(event);
   _componentClickEnter = (event) => this.componentClickEnter(event);
+  _componentKeyDown = (event) => this.componentKeyDown(event);
+  _componentKeyUp = (event) => this.componentKeyUp(event);
 
   componentDidMount() {
     if (!this.el)
@@ -185,12 +204,16 @@ class Focusable extends Component {
     this.el.addEventListener('sn:focused', this._componentFocused);
     this.el.addEventListener('sn:unfocused', this._componentUnfocused);
     this.el.addEventListener('sn:enter-up', this._componentClickEnter);
+    this.el.addEventListener('keydown', this._componentKeyDown);
+    this.el.addEventListener('keyup', this._componentKeyUp);
   }
 
   componentWillUnmount() {
     this.el.removeEventListener('sn:focused', this._componentFocused);
     this.el.removeEventListener('sn:unfocused', this._componentUnfocused);
     this.el.removeEventListener('sn:enter-up', this._componentClickEnter);
+    this.el.removeEventListener('keydown', this._componentKeyDown);
+    this.el.removeEventListener('keyup', this._componentKeyUp);
   }
 
   render() {
