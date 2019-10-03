@@ -188,6 +188,13 @@ class Focusable extends Component {
       this.props.onKeyUp(e);
     }
   }
+  autoScroll(e) {
+    if (this.props.autoScroll) {
+      //browser will scroll it into view
+    } else {
+      e.preventDefault();//don't let browser scroll
+    }
+  }
 
   _componentWillFocus = (event) => this.componentWillFocus(event);
   _componentFocused = (event) => this.componentFocused(event);
@@ -195,6 +202,7 @@ class Focusable extends Component {
   _componentClickEnter = (event) => this.componentClickEnter(event);
   _componentKeyDown = (event) => this.componentKeyDown(event);
   _componentKeyUp = (event) => this.componentKeyUp(event);
+  _autoScroll = (event) => this.autoScroll(event);
 
   componentDidMount() {
     if (!this.el)
@@ -206,6 +214,7 @@ class Focusable extends Component {
     this.el.addEventListener('sn:enter-up', this._componentClickEnter);
     this.el.addEventListener('keydown', this._componentKeyDown);
     this.el.addEventListener('keyup', this._componentKeyUp);
+    this.el.addEventListener('focus', this._autoScroll);
   }
 
   componentWillUnmount() {
@@ -214,6 +223,7 @@ class Focusable extends Component {
     this.el.removeEventListener('sn:enter-up', this._componentClickEnter);
     this.el.removeEventListener('keydown', this._componentKeyDown);
     this.el.removeEventListener('keyup', this._componentKeyUp);
+    this.el.removeEventListener('focus', this._autoScroll);
   }
 
   render() {

@@ -1652,6 +1652,8 @@ var Focusable = function (_Component2) {
       return _this2.componentKeyDown(event);
     }, _this2._componentKeyUp = function (event) {
       return _this2.componentKeyUp(event);
+    }, _this2._autoScroll = function (event) {
+      return _this2.autoScroll(event);
     }, _temp), _possibleConstructorReturn(_this2, _ret);
   }
 
@@ -1698,6 +1700,15 @@ var Focusable = function (_Component2) {
       }
     }
   }, {
+    key: 'autoScroll',
+    value: function autoScroll(e) {
+      if (this.props.autoScroll) {
+        //browser will scroll it into view
+      } else {
+        e.preventDefault(); //don't let browser scroll
+      }
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       if (!this.el) return;
@@ -1708,6 +1719,7 @@ var Focusable = function (_Component2) {
       this.el.addEventListener('sn:enter-up', this._componentClickEnter);
       this.el.addEventListener('keydown', this._componentKeyDown);
       this.el.addEventListener('keyup', this._componentKeyUp);
+      this.el.addEventListener('focus', this._autoScroll);
     }
   }, {
     key: 'componentWillUnmount',
@@ -1717,6 +1729,7 @@ var Focusable = function (_Component2) {
       this.el.removeEventListener('sn:enter-up', this._componentClickEnter);
       this.el.removeEventListener('keydown', this._componentKeyDown);
       this.el.removeEventListener('keyup', this._componentKeyUp);
+      this.el.removeEventListener('focus', this._autoScroll);
     }
   }, {
     key: 'render',
