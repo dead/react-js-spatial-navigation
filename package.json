@@ -1,6 +1,6 @@
 {
   "name": "react-js-spatial-navigation",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A wrapper of js-spatial-navigation to react components",
   "main": "build/index.js",
   "bugs": {
@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "react": "^15.5.4",
-    "webpack": "^2.6.1"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
